@@ -280,7 +280,8 @@ const ViewerScreen: React.FC<ViewerScreenProps> = ({
           {/* Right Side Fixed Details Panel Layout (Screen 5 Compliance) */}
           {selectedLot && (
             <div className="w-full md:w-[30rem] border-t md:border-t-0 md:border-l border-[#171796]/10 flex flex-col justify-between p-8 sm:p-10 lg:p-12 shrink-0 h-[60vh] md:h-full z-10 overflow-y-auto kiosk-portrait-sidebar bg-white">
-              <div className="flex-1 flex flex-col justify-between min-h-0">
+              {/* No min-h-0: content keeps its natural height so the panel scrolls instead of overlapping the CTA */}
+              <div className="flex-1 flex flex-col">
               
               {/* Editorial Double Rule Header */}
               <div className="border-b-4 border-double border-[#171796]/20 pb-5 shrink-0 mb-6">
@@ -357,7 +358,7 @@ const ViewerScreen: React.FC<ViewerScreenProps> = ({
               </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 shrink-0">
               {selectedLot.status === 'Sold' ? (
                 <div
                   role="status"

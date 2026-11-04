@@ -203,6 +203,15 @@
   }
 }
 
+/* Short landscape screens (laptops, landscape kiosks): compact the lot ledger so it fits without scrolling */
+@media (orientation: landscape) and (max-height: 900px) {
+  .kiosk-portrait-sidebar .lot-detail-item {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    margin-block: 0;
+  }
+}
+
 /* Force side-by-side horizontal magazine view on large tablets and vertical kiosks (width >= 768px) */
 @media (orientation: portrait) and (min-width: 768px) {
   .kiosk-portrait-container {
