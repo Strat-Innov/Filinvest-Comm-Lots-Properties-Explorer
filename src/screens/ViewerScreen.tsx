@@ -331,6 +331,15 @@ const ViewerScreen: React.FC<ViewerScreenProps> = ({
                     </span>
                   </div>
 
+                  <div className="lot-detail-item opacity-0 flex justify-between items-baseline py-4 md:py-5 border-b border-[#171796]/10">
+                    <span className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-slate-500">
+                      Status
+                    </span>
+                    <span className={`text-base md:text-lg font-bold ${selectedLot.status === 'Sold' ? 'text-slate-500' : 'text-[#171796]'}`}>
+                      {selectedLot.status}
+                    </span>
+                  </div>
+
                   {selectedLot.structureSize !== undefined && (
                     <>
                       <div className="lot-detail-item opacity-0 flex justify-between items-baseline py-4 md:py-5 border-b border-[#171796]/10">
@@ -349,7 +358,14 @@ const ViewerScreen: React.FC<ViewerScreenProps> = ({
             </div>
 
             <div className="mt-8">
-              {inquiriesEnabled && (
+              {selectedLot.status === 'Sold' ? (
+                <div
+                  role="status"
+                  className="w-full py-4 bg-slate-100 border border-slate-300 text-slate-500 text-xs font-bold uppercase tracking-wider text-center"
+                >
+                  Lot Sold — Not Available for Inquiry
+                </div>
+              ) : inquiriesEnabled && (
                 <button
                   onClick={onShowInquiryModal}
                   className="w-full py-4 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white text-xs font-bold uppercase tracking-wider transition-all shadow cursor-pointer"

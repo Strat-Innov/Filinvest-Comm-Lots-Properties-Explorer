@@ -1,4 +1,4 @@
-import { CommercialProject, CommercialLot } from './types';
+import { CommercialProject, CommercialLot, LotStatus } from './types';
 import lotOverridesData from './lotCoordinates.json';
 import conceptOverridesData from './conceptCoordinates.json';
 const lotOverrides = lotOverridesData as unknown as Record<string, [number, number][]>;
@@ -229,7 +229,7 @@ const generateFCSpectrumLots = (): CommercialLot[] => {
       areaSqm: d.size,
       pricePerSqm: d.price,
       far: d.far,
-      status: (index === 3 || index === 11 || index === 14 ? 'Reserved' : 'Available') as 'Available' | 'Reserved',
+      status: (index === 3 || index === 11 || index === 14 ? 'Reserved' : 'Available') as LotStatus,
       points: `${100 + col * 90},${220 + row * 80} ${170 + col * 90},${220 + row * 80} ${170 + col * 90},${280 + row * 80} ${100 + col * 90},${280 + row * 80}`,
       labelText: d.num.replace('Lot ', 'L').replace('Blk ', 'B'),
       // Golden Yellow for all plots
@@ -309,7 +309,7 @@ const generateCDMLots = (): CommercialLot[] => {
       areaSqm: d.size,
       pricePerSqm: d.price,
       far: d.far,
-      status: (index === 4 || index === 11 || index === 17 ? 'Reserved' : 'Available') as 'Available' | 'Reserved',
+      status: (index === 4 || index === 11 || index === 17 ? 'Reserved' : 'Available') as LotStatus,
       points: `${60 + col * 85},${120 + row * 75} ${125 + col * 85},${120 + row * 75} ${125 + col * 85},${180 + row * 75} ${60 + col * 85},${180 + row * 75}`,
       labelText: d.num,
       coordinates: [
@@ -341,7 +341,7 @@ const generateCDMLots = (): CommercialLot[] => {
       areaSqm: d.size,
       pricePerSqm: d.price,
       far: d.far,
-      status: (index === 3 ? 'Reserved' : 'Available') as 'Available' | 'Reserved',
+      status: (index === 3 ? 'Reserved' : 'Available') as LotStatus,
       points: `${650},${120 + index * 75} ${780},${120 + index * 75} ${780},${180 + index * 75} ${650},${180 + index * 75}`,
       labelText: d.num,
       coordinates: [
@@ -358,11 +358,11 @@ const generateCDMLots = (): CommercialLot[] => {
 
 const generateDHLots = (): CommercialLot[] => {
   const dhCenter: [number, number] = [14.3820, 121.0125];
-  const data = [
+  const data: { num: string; size: number; price: number; far: number; structureSize?: number; structurePrice?: number; sold?: boolean }[] = [
     { num: 'Lot 2A-1', size: 1621, price: 226000, far: 2 },
-    { num: 'Lot 2A-2', size: 742, price: 226000, far: 2 },
-    { num: 'Lot 2B', size: 742, price: 226000, far: 2 },
-    { num: 'Lot 2C', size: 742, price: 226000, far: 2 },
+    { num: 'Lot 2A-2', size: 742, price: 226000, far: 2, sold: true },
+    { num: 'Lot 2B', size: 742, price: 226000, far: 2, sold: true },
+    { num: 'Lot 2C', size: 742, price: 226000, far: 2, sold: true },
     { num: 'Lot 2D', size: 742, price: 226000, far: 2 },
     { num: 'Lot 2E', size: 742, price: 226000, far: 2 },
     { num: 'Lot 2G', size: 718, price: 226000, far: 2, structureSize: 96, structurePrice: 14000000 }
@@ -380,7 +380,7 @@ const generateDHLots = (): CommercialLot[] => {
       structureSize: d.structureSize,
       structurePrice: d.structurePrice,
       far: d.far,
-      status: (index === 5 ? 'Reserved' : 'Available') as 'Available' | 'Reserved',
+      status: (d.sold ? 'Sold' : index === 5 ? 'Reserved' : 'Available') as LotStatus,
       points: `${100 + index * 100},220 ${180 + index * 100},220 ${180 + index * 100},350 ${100 + index * 100},350`,
       labelText: d.num,
       coordinates: [
@@ -414,7 +414,7 @@ const generateBVF_Lots = (): CommercialLot[] => {
       areaSqm: d.size,
       pricePerSqm: Math.round(d.price * 100) / 100,
       far: d.far,
-      status: (index === 3 ? 'Reserved' : 'Available') as 'Available' | 'Reserved',
+      status: (index === 3 ? 'Reserved' : 'Available') as LotStatus,
       points: `${100 + index * 110},220 ${190 + index * 110},220 ${190 + index * 110},330 ${100 + index * 110},330`,
       labelText: d.num,
       coordinates: [
@@ -444,6 +444,13 @@ export const COMMERCIAL_LOTS: CommercialLot[] = [
   }
   return updatedLot;
 });
+
+/** Neutral fill/stroke for sold lots so they read as unavailable on every township's map. */
+export const SOLD_LOT_COLOR = '#94a3b8'; // slate-400
+
+/** Map polygon colour for a lot: sold lots are greyed out, otherwise override or brand colour. */
+export const getLotColor = (lot: CommercialLot, brand: CommercialProject['brand']): string =>
+  lot.status === 'Sold' ? SOLD_LOT_COLOR : lot.colorOverride || BRAND_COLORS_COMMERCIAL[brand];
 
 export const BRAND_COLORS_COMMERCIAL = {
   'Premier Township': '#fdb10c',    // Golden Yellow

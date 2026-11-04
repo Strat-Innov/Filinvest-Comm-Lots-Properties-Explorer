@@ -272,7 +272,8 @@ export default function App() {
         showModal={showInquiryModal}
         onClose={() => setShowInquiryModal(false)}
         selectedProject={selectedProject}
-        selectedLot={selectedLot}
+        // A sold lot can't be inquired on; header "Inquire Now" falls back to a general inquiry.
+        selectedLot={selectedLot?.status === 'Sold' ? null : selectedLot}
         onLeadSubmit={handleLeadSubmit}
       />
 

@@ -19,6 +19,8 @@ export interface CommercialProject {
   conceptMapSvg?: string;      // URL to the concept map SVG file
 }
 
+export type LotStatus = 'Available' | 'Reserved' | 'Sold';
+
 export interface CommercialLot {
   id: string;
   projectId: string;
@@ -29,7 +31,7 @@ export interface CommercialLot {
   structureSize?: number; // optional structure size in sqm
   structurePrice?: number; // optional structure price in PHP
   far: number; // Floor Area Ratio
-  status: 'Available' | 'Reserved';
+  status: LotStatus;
   points: string; // SVG path points or polyline coords representation for rendering
   labelText?: string; // Short code to display in the center of the lot
   coordinates?: [number, number][]; // Lat-Lng polygon boundary coordinates for OpenStreetMap

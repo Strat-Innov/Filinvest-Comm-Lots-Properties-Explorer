@@ -44,6 +44,15 @@
   pointer-events: none !important;
 }
 
+/* "SOLD" tag under the lot label on sold polygons */
+.lot-label-sold {
+  display: block;
+  margin-top: 1px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
 .lot-label-tooltip-reserved {
   background: transparent !important;
   border: none !important;

@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { CommercialLot, CommercialProject } from '../types';
-import { BRAND_COLORS_COMMERCIAL } from '../constants';
+import { getLotColor } from '../constants';
 import { MapPin, Layers, Plus, Minus, Target, WifiOff } from 'lucide-react';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
@@ -1013,7 +1013,7 @@ const InteractiveSDP: React.FC<InteractiveSDPProps> = ({
           {projectLots.map((lot) => {
             const isSelected = selectedLot?.id === lot.id;
             const isAdminSelected = isEditMode && adminSelectedIds.includes(lot.id);
-            const themeColor = lot.colorOverride || BRAND_COLORS_COMMERCIAL[project.brand];
+            const themeColor = getLotColor(lot, project.brand);
 
             // Set coordinates list safely
             if (!lot.coordinates || lot.coordinates.length < 3) return null;
@@ -1065,6 +1065,7 @@ const InteractiveSDP: React.FC<InteractiveSDPProps> = ({
                   className="lot-label-tooltip"
                 >
                   {lot.labelText || lot.lotNumber}
+                  {lot.status === 'Sold' && <span className="lot-label-sold">Sold</span>}
                 </Tooltip>
               </Polygon>
             );
@@ -1134,7 +1135,7 @@ const InteractiveSDP: React.FC<InteractiveSDPProps> = ({
               
               const isSelected = selectedLot?.id === lot.id;
               const isAdminSelected = isEditMode && adminSelectedIds.includes(lot.id);
-              const themeColor = lot.colorOverride || BRAND_COLORS_COMMERCIAL[project.brand];
+              const themeColor = getLotColor(lot, project.brand);
               
               // Map SVG points string "x,y" to Leaflet LatLng [800-y, x]
               const pairs = lot.points.trim().split(/\s+/);
@@ -1191,6 +1192,7 @@ const InteractiveSDP: React.FC<InteractiveSDPProps> = ({
                     className="lot-label-tooltip"
                   >
                     {lot.labelText || lot.lotNumber}
+                    {lot.status === 'Sold' && <span className="lot-label-sold">Sold</span>}
                   </Tooltip>
                 </Polygon>
               );

@@ -21,6 +21,9 @@ An inactivity timeout (`useInactivityTimeout`) returns the kiosk to the landing 
   `src/conceptCoordinates.json` (SVG points on the concept map).
 - In dev only, `vite.config.ts` exposes `POST /api/save-lots` and `POST /api/save-concept-lots`,
   which write edited polygons back to those JSON files. These endpoints do not exist in production.
+- Lot `status` is `Available | Reserved | Sold`. Only `Sold` is rendered on the maps (grey via
+  `getLotColor`, "SOLD" label) and it blocks lot inquiries. To mark a lot sold, set its status in
+  `src/constants.ts` (Daang Hari uses a `sold: true` flag in its lot table).
 - Township categories (`TownshipBrand`): Premier Township, Coastal Hub, High Growth Area,
   Exurban Community — colours in `BRAND_COLORS_COMMERCIAL`.
 
