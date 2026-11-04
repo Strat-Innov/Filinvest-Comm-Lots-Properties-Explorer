@@ -1,0 +1,333 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", sans-serif;
+  --color-editorial-bg: #1a2b4b;
+  --color-editorial-black: #f8fafc;
+}
+
+@layer base {
+  body {
+    @apply bg-editorial-bg text-editorial-black antialiased;
+  }
+}
+
+/* Leaflet Theme Overrides */
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  @apply bg-slate-950 text-slate-100 border border-white/10 font-sans shadow-2xl! ring-1 ring-white/5 rounded-none!;
+}
+
+.grayscale-map .leaflet-tile {
+  filter: grayscale(100%) invert(95%) sepia(5%) saturate(200%) hue-rotate(190deg) contrast(95%) brightness(95%);
+}
+
+.light-theme-map .leaflet-tile {
+  filter: grayscale(100%) contrast(108%) brightness(92%) saturate(0%);
+}
+
+.light-theme-map .leaflet-container {
+  background: #f8fafc !important;
+}
+
+.lot-label-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.8) !important;
+  pointer-events: none !important;
+}
+
+.lot-label-tooltip-reserved {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #94a3b8 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 9px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 3px rgba(0, 0, 0, 0.7) !important;
+  pointer-events: none !important;
+}
+
+.leaflet-container {
+  background: #0d1527 !important;
+}
+
+.leaflet-popup-content {
+  @apply m-0! p-4!;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  @apply text-editorial-black opacity-40 hover:opacity-100 transition-opacity p-2;
+}
+
+.leaflet-bar a {
+  @apply bg-editorial-bg! text-editorial-black! border-editorial-black/20! hover:bg-editorial-black! hover:text-editorial-bg! transition-colors;
+}
+
+.markdown-body {
+  @apply font-sans leading-relaxed;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Geoman Toolbar Icons */
+.geoman-scale-up::after { content: "+"; font-size: 16px; font-weight: bold; margin-left: 2px; }
+.geoman-scale-down::after { content: "-"; font-size: 16px; font-weight: bold; margin-left: 2px; }
+.geoman-stretch-x::after { content: "↔"; font-size: 16px; font-weight: bold; margin-left: 1px; }
+.geoman-stretch-y::after { content: "↕"; font-size: 16px; font-weight: bold; margin-left: 1px; }
+.geoman-rotate-left::after { content: "↺"; font-size: 16px; font-weight: bold; }
+.geoman-rotate-right::after { content: "↻"; font-size: 16px; font-weight: bold; }
+.geoman-rotate-left-fast::after { content: "↶"; font-size: 16px; font-weight: bold; }
+.geoman-rotate-right-fast::after { content: "↷"; font-size: 16px; font-weight: bold; }
+
+.geoman-scale-up, .geoman-scale-down, .geoman-stretch-x, .geoman-stretch-y,
+.geoman-rotate-left, .geoman-rotate-right, .geoman-rotate-left-fast, .geoman-rotate-right-fast {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background-image: none !important;
+}
+
+.svg-overlay-marker {
+  overflow: visible !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Fix Tailwind CSS max-width 100% bug on Leaflet images and SVGs which causes shifting/shrinking */
+.leaflet-container img, 
+.leaflet-container svg, 
+.leaflet-container canvas {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.invert-concept-map {
+  filter: url(#daang-hari-tint);
+}
+
+/* Custom Tooltip mimicking Popup style */
+.custom-hover-tooltip {
+  @apply bg-[#020617]! text-[#D4AF37]! border border-white/10! font-sans shadow-2xl! ring-1 ring-white/5! rounded-none! px-2! py-1!;
+  pointer-events: none !important;
+  white-space: nowrap !important;
+  transition: opacity 0.25s ease-out !important;
+  opacity: 1;
+}
+.custom-hover-tooltip.leaflet-tooltip-top::before {
+  border-top-color: #020617 !important;
+}
+.custom-hover-tooltip.leaflet-tooltip-bottom::before {
+  border-bottom-color: #020617 !important;
+}
+.custom-hover-tooltip.leaflet-tooltip-left::before {
+  border-left-color: #020617 !important;
+}
+.custom-hover-tooltip.leaflet-tooltip-right::before {
+  border-right-color: #020617 !important;
+}
+
+/* Hide hover tooltips entirely on mobile/touch screens to prevent ghost squares on tap */
+@media (max-width: 768px) {
+  .leaflet-tooltip-pane,
+  .leaflet-tooltip-pane *,
+  .leaflet-tooltip,
+  .leaflet-tooltip::before,
+  .leaflet-tooltip::after {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Kiosk Portrait Layout and Typography Accommodations (e.g., 2304x4032) */
+@media (orientation: portrait) {
+  /* Scale root font-size slightly for tablets and normal portrait displays */
+  html {
+    font-size: 18px;
+  }
+
+  /* Force layout to flow vertically ONLY on small mobile portrait screens (< 768px wide) */
+  .kiosk-portrait-container {
+    flex-direction: column !important;
+  }
+
+  .kiosk-portrait-sidebar {
+    width: 100% !important;
+    height: 48vh !important; /* Allocates 52vh for the Leaflet Map container */
+    border-left: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Stack regional catalog cards in one beautiful column to take advantage of high vertical screens */
+  .kiosk-portrait-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  
+  /* Increase card heights inside the portrait grid to feel extremely premium */
+  .kiosk-portrait-grid > div {
+    min-height: 500px !important;
+    padding: 2.5rem !important;
+  }
+
+  /* Spacing overrides for details items inside the bottom sidebar */
+  .kiosk-portrait-sidebar .lot-detail-item {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* Force side-by-side horizontal magazine view on large tablets and vertical kiosks (width >= 768px) */
+@media (orientation: portrait) and (min-width: 768px) {
+  .kiosk-portrait-container {
+    flex-direction: row !important; /* Double-page magazine split */
+  }
+
+  .kiosk-portrait-sidebar {
+    width: 42% !important; /* Elegant 42% details sidebar column */
+    height: 100% !important; /* Full height architectural catalog sheet */
+    border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: none !important;
+  }
+
+  .project-intro-description {
+    padding-top: 3.5rem !important;
+    padding-bottom: 3.5rem !important;
+    padding-left: 2rem !important;
+    padding-right: 5.2rem !important; /* Elegant 5.2rem (125px) gutter clears the absolute pill while maximizing text container width */
+  }
+
+  .project-intro-heading {
+    font-size: 1.95rem !important; /* Optimally sized title scale so long words like "Commercial" fit beautifully on their own line */
+    line-height: 1.2 !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important; /* Guarantees words are never split across characters */
+  }
+
+  .selection-slide-heading {
+    font-size: 2.6rem !important; /* Capped for portrait/kiosk screens to fit slide titles beautifully without excessive wrapping */
+    line-height: 1.15 !important;
+  }
+
+  .kiosk-portrait-sidebar .lot-detail-item {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+}
+
+/* Medium Kiosk / High-Res Portrait screens (e.g. 1080x1920 or larger) */
+@media (orientation: portrait) and (min-width: 1024px) {
+  html {
+    font-size: 24px;
+  }
+
+  /* Scale Lucide SVG icons dynamically with the scaled parent text */
+  svg.lucide {
+    width: 1.3em !important;
+    height: 1.3em !important;
+  }
+
+  /* Override hardcoded small arbitrary font-size utility classes for legibility */
+  .text-\[8px\] { font-size: 14px !important; }
+  .text-\[9px\] { font-size: 16px !important; }
+  .text-\[10px\] { font-size: 18px !important; }
+  .text-\[11px\] { font-size: 20px !important; }
+  .text-\[12px\] { font-size: 22px !important; }
+}
+
+/* Ultra High-Res Portrait Kiosks (specifically 2304x4032 display scale) */
+@media (orientation: portrait) and (min-width: 2000px) {
+  html {
+    font-size: 32px; /* Full 2x proportional scale */
+  }
+
+  svg.lucide {
+    width: 1.6em !important;
+    height: 1.6em !important;
+  }
+
+  .text-\[8px\] { font-size: 18px !important; }
+  .text-\[9px\] { font-size: 20px !important; }
+  .text-\[10px\] { font-size: 22px !important; }
+  .text-\[11px\] { font-size: 24px !important; }
+  .text-\[12px\] { font-size: 26px !important; }
+}
+
+/* Magazine and Newsletter Style Typography/Layout Overrides */
+.magazine-double-rules {
+  border-top: 4px double rgba(255, 255, 255, 0.15) !important;
+  border-bottom: 4px double rgba(255, 255, 255, 0.15) !important;
+}
+
+.magazine-header-rule {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.magazine-thin-rule {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.magazine-dropcap::first-letter {
+  font-family: "Montserrat", sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  float: left;
+  line-height: 0.85;
+  margin-right: 0.6rem;
+  margin-top: 0.1rem;
+  color: var(--theme-accent, #D4AF37);
+  text-transform: uppercase;
+}
+
+.magazine-column-container {
+  column-count: 2;
+  column-gap: 1.5rem;
+  column-rule: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Prevent image grabbing and copying globally */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+@keyframes bounceHorizontal {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+.animate-bounce-horizontal {
+  animation: bounceHorizontal 1s ease-in-out infinite;
+}
+
+@keyframes bounceHorizontalLeft {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-6px); }
+}
+
+.animate-bounce-horizontal-left {
+  animation: bounceHorizontalLeft 1s ease-in-out infinite;
+}
+
